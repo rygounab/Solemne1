@@ -1,0 +1,54 @@
+{% extends 'Bases/listar.html' %}
+
+{% block agregar %}
+  <a href="{% url 'addCoach' %}" class="btn btn-lg btn-primary btn-block" role="button">Agregar Entrenador</a>
+{% endblock %}
+
+{% block titulo %}
+  <a class="navbar-brand" href="#">Entrenadores</a>
+  <a href="{% url 'OpcionesAdmin' %}">Atras</a>
+{% endblock %}
+
+{% block nombreLista %}
+  <h1 style="margin-top:30px;">Listado de Entrenadores</h1>
+{% endblock %}
+
+{% block lista %}
+
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Edad</th>
+      <th scope="col">Email</th>
+      <th scope="col">nickname</th>
+      <th scope="col">rut</th>
+      <th scope="col">Acción</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for Objeto in lista_objetos %}
+    <tr>
+      <th scope="row">{{Objeto.id}}</th>
+      <td>{{Objeto.name}}</td>
+      <td>{{Objeto.age}}</td>
+      <td>{{Objeto.email}}</td>
+      <td>{{Objeto.nickname}}</td>
+      <td>{{Objeto.rut}}</td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Opciones
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <a class="dropdown-item" href="{% url 'editCoach' Objeto.id %}">Editar</a>
+            <a class="dropdown-item" href="{% url 'deleteCoach' Objeto.id %}">Eliminar</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+{% endblock %}

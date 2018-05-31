@@ -1,0 +1,31 @@
+{% extends 'Bases/listar.html' %}
+
+{% block agregar %}
+{% endblock %}
+
+{% block titulo %}
+  <a class="navbar-brand" href="#">Hola administrador</a>
+  <a href="{% url 'logout' %}">Salir</a>
+{% endblock %}
+
+{% block nombreLista %}
+  <h1 style="margin-top:30px;">Categorias</h1>
+{% endblock %}
+
+{% block lista %}
+
+  <tbody>
+    <tr>
+      <a href="{% url 'listTeam' %}" class="btn btn-lg btn-primary btn-block" role="button">Equipos</a>
+    </tr>
+
+    <tr>
+      <a href="{% url 'listPlayer' %}" class="btn btn-lg btn-primary btn-block" role="button">Jugadores</a>
+    </tr>
+
+    <tr>
+      <a href="{% url 'listCoach' %}" class="btn btn-lg btn-primary btn-block" role="button">Entrenadores</a>
+    </tr>
+  </tbody>
+
+{% endblock %}

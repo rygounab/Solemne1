@@ -1,0 +1,12 @@
+{% extends 'Bases/agregar.html' %}
+
+{% block titulo %}
+  <h1 style="margin-top:30px;">Agregar Player</h1>
+{% endblock %}
+
+{% block datos %}
+
+ <h3>¿Desea eliminar el registro de {{ equipo.name }} ?</h3>
+ <a class= "btn btn-default" href="{% url 'listTeam' %}">Cancelar</a>
+
+{% endblock %}
