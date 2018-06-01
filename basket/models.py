@@ -1,7 +1,7 @@
 from django.db import models
 from basket.defines import POSITION_PLAYER_CHOICES, Tipo_Usuarios
 
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 import json
 
@@ -35,6 +35,7 @@ class Player(models.Model):
 
 
 class Coach(models.Model):
+
     name = models.CharField(max_length=120)
     age = models.PositiveIntegerField()
     email = models.EmailField()
@@ -47,9 +48,9 @@ class Coach(models.Model):
 
 class Nomina(models.Model):
     nombrePartido = models.CharField(max_length=120)
-    fecha = models.DateField()
-    hora = models.TimeField()
-    jugador= models.ForeignKey(Player, on_delete=models.CASCADE)
+    fecha = models.DateField(null=True)
+    hora = models.TimeField(null=True)
+    jugador= models.ManyToManyField(Player)
 
     def set_jugador(self, x):
         self.jugador=json.dumps(x)

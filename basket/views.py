@@ -8,33 +8,90 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 #Protegemos las vistas con login_required
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-@login_required(login_url = '../aut/login')
+from django.core.paginator import Paginator
+
+
+# @login_required(login_url = '../aut/login')
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def listarJugador(request):
     data = {}
-    data['lista_objetos']=Player.objects.all()
-    template_name='player/listarPlayer.html'
-    return render(request, template_name,data)
+    # data['lista_objetos']=Player.objects.all()
+    data=Player.objects.all()
+    page=request.GET.get('page',1)
+    paginator=Paginator(data,10)
 
+    try:
+        lista_objetos=paginator.page(page)
+    except PageNotAnInteger:
+        lista_objetos=paginator.page(1)
+    except EmptyPage:
+        lista_objetos=paginator.page(paginator.num_pages)
+
+    template_name='player/listarPlayer.html'
+
+
+
+    # return render(request, template_name,data)
+    return render(request, template_name,{'lista_objetos':lista_objetos})
+
+@login_required(login_url = '../aut/login')
 def listarEquipo(request):
     data = {}
-    data['lista_objetos']=Team.objects.all()
-    template_name='equipo/listarEquipo.html'
-    return render(request, template_name,data)
+    # data['lista_objetos']=Team.objects.all()
+    data=Team.objects.all()
+    page=request.GET.get('page',1)
+    paginator=Paginator(data,4)
 
+    try:
+        lista_objetos=paginator.page(page)
+    except PageNotAnInteger:
+        lista_objetos=paginator.page(1)
+    except EmptyPage:
+        lista_objetos=paginator.page(paginator.num_pages)
+
+    template_name='equipo/listarEquipo.html'
+
+    # return render(request, template_name,data)
+    return render(request, template_name,{'lista_objetos':lista_objetos})
+
+@login_required(login_url = '../aut/login')
+def verEquipo(request):
+    data = {}
+    # data['lista_objetos']=Team.objects.all()
+    data=Team.objects.all()
+    page=request.GET.get('page',1)
+    paginator=Paginator(data,4)
+
+    try:
+        lista_objetos=paginator.page(page)
+    except PageNotAnInteger:
+        lista_objetos=paginator.page(1)
+    except EmptyPage:
+        lista_objetos=paginator.page(paginator.num_pages)
+
+    template_name='equipo/verEquipos.html'
+
+    # return render(request, template_name,data)
+    return render(request, template_name,{'lista_objetos':lista_objetos})
+
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def listarEntreador(request):
     data = {}
     data['lista_objetos']=Coach.objects.all()
     template_name='entrenador/listarEntrenador.html'
     return render(request, template_name,data)
 
+
+@login_required(login_url = '../aut/login')
 def listarNominas(request):
     data = {}
     data['lista_objetos']=Nomina.objects.all()
     template_name='entrenador/listarNominas.html'
     return render(request, template_name,data)
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def agregarJugador(request):
     template_name='player/AgregarPlayer.html'
     if request.method=='POST':
@@ -59,6 +116,7 @@ def agregarJugador(request):
         form=PlayerForm()
     return render(request, template_name,{'form':form})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def agregarEquipo(request):
     template_name='equipo/AgregarEquipo.html'
     if request.method=='POST':
@@ -70,6 +128,7 @@ def agregarEquipo(request):
         form1=TeamForm()
     return render(request, template_name,{'form1':form1})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def agregarEntrenador(request):
     template_name='entrenador/AgregarEntrenador.html'
     if request.method=='POST':
@@ -81,6 +140,31 @@ def agregarEntrenador(request):
         form=CoachForm()
     return render(request, template_name,{'form':form})
 
+@login_required(login_url = '../aut/login')
+def agregarNominas(request):
+    template_name='entrenador/AgregarNomina.html'
+    if request.method=='POST':
+        form=NominaForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            n=Nomina.objects.create()
+            n.nombrePartido=form.data.get('nombrePartido')
+            n.fecha=form.data.get('fecha')
+            n.hora=form.data.get('hora')
+            print("nom")
+
+            for jugador in Player.objects.filter(pk__in=form.cleaned_data['jugadores']):
+                n.jugador.add(jugador)
+
+            n.save()
+        
+
+            return HttpResponseRedirect(reverse('listNominas'))
+    else:
+        form=NominaForm()
+    return render(request, template_name,{'form':form})
+
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def editarJugador(request,id_Jugador):
     template_name='player/AgregarPlayer.html'
     jugador= Player.objects.get(id=id_Jugador)
@@ -93,6 +177,7 @@ def editarJugador(request,id_Jugador):
             return HttpResponseRedirect(reverse('listPlayer'))
     return render(request, template_name,{'form':form})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def editarEquipo(request,id_Equipo):
     template_name='equipo/AgregarEquipo.html'
     equipo= Team.objects.get(id=id_Equipo)
@@ -107,6 +192,7 @@ def editarEquipo(request,id_Equipo):
             return HttpResponseRedirect(reverse('listTeam'))
     return render(request, template_name,{'form1':form1})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def editarEntrenador(request,id_Entrenador):
     template_name='entrenador/AgregarEntrenador.html'
     entrenador= Coach.objects.get(id=id_Entrenador)
@@ -119,6 +205,7 @@ def editarEntrenador(request,id_Entrenador):
             return HttpResponseRedirect(reverse('listCoach'))
     return render(request, template_name,{'form':form})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def eliminarJugador(request, id_Jugador):
     template_name='player/EliminarPlayer.html'
     jugador=Player.objects.get(id=id_Jugador)
@@ -127,6 +214,7 @@ def eliminarJugador(request, id_Jugador):
         return HttpResponseRedirect(reverse('listPlayer'))
     return render(request, template_name,{'jugador':jugador})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def eliminarEquipo(request, id_Equipo):
     template_name='equipo/EliminarEquipo.html'
     equipo=Team.objects.get(id=id_Equipo)
@@ -135,6 +223,7 @@ def eliminarEquipo(request, id_Equipo):
         return HttpResponseRedirect(reverse('listTeam'))
     return render(request, template_name,{'equipo':equipo})
 
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def eliminarEntrenador(request, id_Entrenador):
     template_name='entrenador/EliminarEntrenador.html'
     entrenador=Coach.objects.get(id=id_Entrenador)
@@ -143,44 +232,14 @@ def eliminarEntrenador(request, id_Entrenador):
         return HttpResponseRedirect(reverse('listCoach'))
     return render(request, template_name,{'entrenador':entrenador})
 
-
+@user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def OpcionesAdmin(request):
     data = {}
     template_name='admin/opciones.html'
     return render(request, template_name,data)
 
+@login_required(login_url = '../aut/login')
 def OpcionesCoach(request):
     data = {}
     template_name='entrenador/opciones.html'
     return render(request, template_name,data)
-
-
-
-def add(request):
-    data = {}
-    if request.method == "POST":
-        data['form'] = PlayerForm(request.POST, request.FILES)
-
-        if data['form'].is_valid():
-            # aca el formulario valido
-            data['form'].save()
-
-            return redirect('player_list')
-
-    else:
-        data['form'] = PlayerForm()
-
-    template_name = 'player/add_player.html'
-    return render(request, template_name, data)
-
-
-def detail(request, player_id):
-
-    data = {}
-    template_name = 'player/detail_player.html'
-
-    # SELECT * FROM player WHERE id = player_id
-    data['player'] = Player.objects.get(pk=player_id)
-    # import pdb;pdb.set_trace()
-
-    return render(request, template_name, data)

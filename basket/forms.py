@@ -2,6 +2,8 @@ from django.forms import ModelForm
 from basket.models import Player, Team, Coach, Nomina
 from django import forms
 
+from django.forms.widgets import CheckboxSelectMultiple
+
 
 class PlayerForm(ModelForm):
     class Meta:
@@ -79,15 +81,18 @@ class NominaForm(ModelForm):
     class Meta:
         model = Nomina
 
+
         fields = [
             'nombrePartido',
             'fecha',
             'hora',
-            'jugador',
+            # 'jugador',
         ]
         labels={
             'nombrePartido':'NombrePartido',
             'fecha':'Fecha',
             'hora':'Hora',
-            'jugador':'Jugador',
+            # 'jugador':'Jugadores',
         }
+
+    jugadores=forms.ModelMultipleChoiceField(Player.objects.all(),required=False)

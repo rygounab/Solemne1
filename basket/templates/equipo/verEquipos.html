@@ -1,0 +1,30 @@
+{% extends 'equipo/listarEquipo.html' %}
+
+{% block agregar %}
+
+{% endblock %}
+
+{% block titulo %}
+  <a class="navbar-brand" href="#">Equipos</a>
+  <a href="{% url 'OpcionesCoach' %}">Atras</a>
+{% endblock %}
+
+{% block lista %}
+  <thead>
+    <tr>
+      <th scope="col">Logo</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Descripcion</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for Objeto in lista_objetos %}
+    <tr>
+      <td><img src="{{Objeto.logo.url}}" alt="foto" width="50px" height="40px"></td>
+      <td>{{Objeto.name}}</td>
+      <td>{{Objeto.description}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+{% endblock %}
