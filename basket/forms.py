@@ -3,7 +3,7 @@ from basket.models import Player, Team, Coach, Nomina
 from django import forms
 
 from django.forms.widgets import CheckboxSelectMultiple
-
+from django.contrib.auth.models import User
 
 class PlayerForm(ModelForm):
     class Meta:
@@ -77,6 +77,7 @@ class CoachForm(ModelForm):
             'team':'Team',
         }
 
+
 class NominaForm(ModelForm):
     class Meta:
         model = Nomina
@@ -92,7 +93,6 @@ class NominaForm(ModelForm):
             'nombrePartido':'NombrePartido',
             'fecha':'Fecha',
             'hora':'Hora',
-            # 'jugador':'Jugadores',
         }
 
-    jugadores=forms.ModelMultipleChoiceField(Player.objects.all(),required=False)
+    jugadores_Seleccione_minimo_5_maximo_12_Presionando_ctrl=forms.ModelMultipleChoiceField(Player.objects.all(),required=False)

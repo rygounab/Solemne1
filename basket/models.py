@@ -35,6 +35,7 @@ class Player(models.Model):
 
 
 class Coach(models.Model):
+    user=models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True,)
 
     name = models.CharField(max_length=120)
     age = models.PositiveIntegerField()
@@ -45,6 +46,19 @@ class Coach(models.Model):
 
     def __str__(self):
         return self.name
+
+# class Coach(models.Model):
+#
+#     name = models.CharField(max_length=120)
+#     age = models.PositiveIntegerField()
+#     email = models.EmailField()
+#     nickname = models.CharField(max_length=120)
+#     rut = models.CharField(max_length=12)
+#     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return self.name
+
 
 class Nomina(models.Model):
     nombrePartido = models.CharField(max_length=120)

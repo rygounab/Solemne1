@@ -1,17 +1,15 @@
 {% extends 'Bases/listar.html' %}
 
 {% block agregar %}
-  <a href="{% url 'addNomina' %}" class="btn btn-lg btn-primary btn-block" role="button">Agregar Nomina</a>
+
 {% endblock %}
 
 {% block titulo %}
-  <a class="navbar-brand" href="#">Entrenadores</a>
-  <a href="{% url 'OpcionesCoach' %}">Atras</a>
+  <a class="navbar-brand" href="#">Jugador</a>
 {% endblock %}
 
 {% block nombreLista %}
   <h1 style="margin-top:30px;">Listado de Nominas</h1>
-  <h4 style="margin-top:30px;">**La nomina queda publica en /basket/ver_nomina**</h4>
 {% endblock %}
 
 {% block lista %}

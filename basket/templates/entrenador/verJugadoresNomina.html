@@ -1,0 +1,41 @@
+{% extends 'Bases/listar.html' %}
+
+{% block agregar %}  
+{% endblock %}
+
+{% block titulo %}
+  <a class="navbar-brand" href="#">Jugadores en Nomina</a>
+{% endblock %}
+
+{% block nombreLista %}
+  <h1 style="margin-top:30px;">Listado de Jugadores en Nomina</h1>
+{% endblock %}
+
+{% block lista %}
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Foto</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">Edad</th>
+      <th scope="col">Posición</th>
+      <th scope="col">Equipo</th>
+      <th scope="col">Acción</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for Objeto in lista_objetos %}
+    <tr>
+      <th scope="row">{{Objeto.id}}</th>
+      <td><img src="{{Objeto.picture.url}}" alt="foto" width="100px" height="80px"></td>
+      <td>{{Objeto.name}}</td>
+      <td>{{Objeto.nickname}}</td>
+      <td>{{Objeto.age}}</td>
+      <td>{{Objeto.position}}</td>
+      <td>{{Objeto.team}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+{% endblock %}

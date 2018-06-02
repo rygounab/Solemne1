@@ -91,6 +91,19 @@ def listarNominas(request):
     template_name='entrenador/listarNominas.html'
     return render(request, template_name,data)
 
+def verNominas(request):
+    data = {}
+    data['lista_objetos']=Nomina.objects.all()
+    template_name='player/verNominas.html'
+    return render(request, template_name,data)
+
+def verJugadoresNomina(request,id_Nomina):
+    template_name='entrenador/verJugadoresNomina.html'
+    data = {}
+    nomina=Nomina.objects.get(id=id_Nomina)
+    data['lista_objetos']=nomina.jugador.all()
+    return render(request, template_name,data)
+
 @user_passes_test(lambda u: u.is_superuser, login_url = '../aut/login' )
 def agregarJugador(request):
     template_name='player/AgregarPlayer.html'
@@ -157,9 +170,9 @@ def agregarNominas(request):
                 n.jugador.add(jugador)
 
             n.save()
-        
 
-            return HttpResponseRedirect(reverse('listNominas'))
+
+            return HttpResponseRedirect(reverse('listnomina'))
     else:
         form=NominaForm()
     return render(request, template_name,{'form':form})
